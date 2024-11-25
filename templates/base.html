@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" class="h-screen">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% block head %}{% endblock %}
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full flex flex-col">
+    <!-- New navigation bar -->
+    <nav class="h-[10vh] flex items-center justify-between px-6 lg:px-8" aria-label="Global">
+        <div class="flex lg:flex-1">
+            <a href="{{ url_for('home') }}" class="text-2xl font-bold text-gray-900">
+                Learning Helper
+            </a>
+        </div>
+        <div class="flex lg:hidden">
+            <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                <span class="sr-only">Open main menu</span>
+                <!-- ...icon code... -->
+            </button>
+        </div>
+        <div class="hidden lg:flex lg:gap-x-12">
+            <a href="#" class="text-sm font-bold text-gray-900">My Courses</a>
+            <a href="{{ url_for('rapid_chat.rapid_chat_popup') }}" class="text-sm font-bold text-gray-900">Rapid Learner</a>
+        </div>
+        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+            {% if session.get('user') %}
+            <a class="text-sm font-bold text-gray-900 pt-2">Welcome, {{ session.get('user') }}</a>
+            <span class="mx-2"></span>
+            <a href="{{ url_for('auth.logout') }}" class="rounded-md bg-black px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black">Logout</a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}" class="rounded-md bg-black px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black">Login</a>
+            <span class="mx-2"></span>
+            <a href="{{ url_for('auth.register') }}" class="rounded-md bg-black px-4 py-2 text-sm font-bold text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-black">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+    <main class="h-[90vh]">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

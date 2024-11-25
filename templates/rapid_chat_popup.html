@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Rapid Learner Setup{% endblock %}
+{% block content %}
+<div class="h-full flex items-center justify-center bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-md w-96">
+        <h2 class="text-2xl font-bold mb-6">Rapid Learner Setup</h2>
+        <form method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Learning Topic</label>
+                <input type="text" name="topic" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Learning Goals</label>
+                <textarea name="goals" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Prior Knowledge</label>
+                <textarea name="prior_knowledge" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required></textarea>
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 text-white rounded-md py-2 hover:bg-indigo-700">Start Learning</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

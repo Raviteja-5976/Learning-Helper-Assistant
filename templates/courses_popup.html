@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-[500px]">
+    <form action="{{ url_for('courses.upload_course') }}" method="post" enctype="multipart/form-data" class="space-y-6">
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Title:</label>
+        <input type="text" name="title" id="title" required class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+      </div>
+      <div>
+        <label for="file" class="block text-sm font-medium text-gray-700 mb-2">Upload File:</label>
+        <input type="file" name="file" id="file" required class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md text-sm text-gray-500">
+      </div>
+      <div class="flex items-center space-x-3 py-2">
+        <input type="checkbox" id="index" name="index" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-2 border-gray-300 rounded">
+        <label for="index" class="text-sm font-medium text-gray-700">Index</label>
+      </div>
+      <div id="index-fields" class="space-y-6" style="display: none;">
+        <div>
+          <label for="start_page" class="block text-sm font-medium text-gray-700 mb-2">Index Start Page:</label>
+          <input type="number" name="start_page" id="start_page" class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        <div>
+          <label for="end_page" class="block text-sm font-medium text-gray-700 mb-2">Index End Page:</label>
+          <input type="number" name="end_page" id="end_page" class="mt-1 block w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+      </div>
+      <div class="flex justify-center pt-4">
+        <button type="submit" class="px-6 py-2.5 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.getElementById('index').addEventListener('change', function() {
+    document.getElementById('index-fields').style.display = this.checked ? 'block' : 'none';
+  });
+</script>
+{% endblock %}

@@ -21,6 +21,8 @@ def init_db():
         Profession TEXT
     )
     ''')
+
+    # cursor.execute("DELETE FROM users WHERE username = 'raviteja_5312'")
     
     conn.commit()
     conn.close()

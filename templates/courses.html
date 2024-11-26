@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="banner h-72 flex flex-col justify-center items-center bg-gray-100">
+  <h1 class="text-5xl font-bold mb-4">My Courses</h1>
+  <a href="{{ url_for('courses.upload_course') }}" class="upload-btn px-6 py-3 text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600">
+    Upload a Course
+  </a>
+</div>
+
+<div class="courses-grid h-96 p-5 overflow-y-auto">
+  <div class="grid grid-cols-4 gap-5">
+    {% for course in courses %}
+      <div class="course-tile bg-gray-300 p-5 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold">{{ course[0] }}</h3>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

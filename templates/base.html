@@ -22,7 +22,7 @@
             </button>
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
-            <a href="#" class="text-sm font-bold text-gray-900">My Courses</a>
+            <a href="{{ url_for('courses.my_courses') }}" class="text-sm font-bold text-gray-900">My Courses</a>
             <a href="{{ url_for('rapid_chat.rapid_chat_popup') }}" class="text-sm font-bold text-gray-900">Rapid Learner</a>
         </div>
         <div class="hidden lg:flex lg:flex-1 lg:justify-end">

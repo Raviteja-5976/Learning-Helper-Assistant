@@ -7,6 +7,9 @@ client = Groq(api_key='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'
 
 @rapid_chat.route('/popup', methods=['GET', 'POST'])
 def rapid_chat_popup():
+    if 'user' not in session:
+        flash('You need to login first!', 'error')
+        return redirect(url_for('auth.login'))
     if request.method == 'POST':
         session['topic'] = request.form['topic']
         session['goals'] = request.form['goals']

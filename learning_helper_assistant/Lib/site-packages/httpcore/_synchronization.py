@@ -1,7 +1,6 @@
-from __future__ import annotations
-
 import threading
-import types
+from types import TracebackType
+from typing import Optional, Type
 
 from ._exceptions import ExceptionMapping, PoolTimeout, map_exceptions
 
@@ -10,7 +9,7 @@ from ._exceptions import ExceptionMapping, PoolTimeout, map_exceptions
 
 try:
     import trio
-except (ImportError, NotImplementedError):  # pragma: nocover
+except ImportError:  # pragma: nocover
     trio = None  # type: ignore
 
 try:
@@ -67,7 +66,7 @@ class AsyncLock:
         elif self._backend == "asyncio":
             self._anyio_lock = anyio.Lock()
 
-    async def __aenter__(self) -> AsyncLock:
+    async def __aenter__(self) -> "AsyncLock":
         if not self._backend:
             self.setup()
 
@@ -80,9 +79,9 @@ class AsyncLock:
 
     async def __aexit__(
         self,
-        exc_type: type[BaseException] | None = None,
-        exc_value: BaseException | None = None,
-        traceback: types.TracebackType | None = None,
+        exc_type: Optional[Type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[TracebackType] = None,
     ) -> None:
         if self._backend == "trio":
             self._trio_lock.release()
@@ -98,14 +97,14 @@ class AsyncThreadLock:
     In the async case `AsyncThreadLock` is a no-op.
     """
 
-    def __enter__(self) -> AsyncThreadLock:
+    def __enter__(self) -> "AsyncThreadLock":
         return self
 
     def __exit__(
         self,
-        exc_type: type[BaseException] | None = None,
-        exc_value: BaseException | None = None,
-        traceback: types.TracebackType | None = None,
+        exc_type: Optional[Type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[TracebackType] = None,
     ) -> None:
         pass
 
@@ -134,7 +133,7 @@ class AsyncEvent:
         elif self._backend == "asyncio":
             self._anyio_event.set()
 
-    async def wait(self, timeout: float | None = None) -> None:
+    async def wait(self, timeout: Optional[float] = None) -> None:
         if not self._backend:
             self.setup()
 
@@ -207,7 +206,7 @@ class AsyncShieldCancellation:
         elif self._backend == "asyncio":
             self._anyio_shield = anyio.CancelScope(shield=True)
 
-    def __enter__(self) -> AsyncShieldCancellation:
+    def __enter__(self) -> "AsyncShieldCancellation":
         if self._backend == "trio":
             self._trio_shield.__enter__()
         elif self._backend == "asyncio":
@@ -216,9 +215,9 @@ class AsyncShieldCancellation:
 
     def __exit__(
         self,
-        exc_type: type[BaseException] | None = None,
-        exc_value: BaseException | None = None,
-        traceback: types.TracebackType | None = None,
+        exc_type: Optional[Type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[TracebackType] = None,
     ) -> None:
         if self._backend == "trio":
             self._trio_shield.__exit__(exc_type, exc_value, traceback)
@@ -240,15 +239,15 @@ class Lock:
     def __init__(self) -> None:
         self._lock = threading.Lock()
 
-    def __enter__(self) -> Lock:
+    def __enter__(self) -> "Lock":
         self._lock.acquire()
         return self
 
     def __exit__(
         self,
-        exc_type: type[BaseException] | None = None,
-        exc_value: BaseException | None = None,
-        traceback: types.TracebackType | None = None,
+        exc_type: Optional[Type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[TracebackType] = None,
     ) -> None:
         self._lock.release()
 
@@ -264,15 +263,15 @@ class ThreadLock:
     def __init__(self) -> None:
         self._lock = threading.Lock()
 
-    def __enter__(self) -> ThreadLock:
+    def __enter__(self) -> "ThreadLock":
         self._lock.acquire()
         return self
 
     def __exit__(
         self,
-        exc_type: type[BaseException] | None = None,
-        exc_value: BaseException | None = None,
-        traceback: types.TracebackType | None = None,
+        exc_type: Optional[Type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[TracebackType] = None,
     ) -> None:
         self._lock.release()
 
@@ -284,7 +283,7 @@ class Event:
     def set(self) -> None:
         self._event.set()
 
-    def wait(self, timeout: float | None = None) -> None:
+    def wait(self, timeout: Optional[float] = None) -> None:
         if timeout == float("inf"):  # pragma: no cover
             timeout = None
         if not self._event.wait(timeout=timeout):
@@ -306,13 +305,13 @@ class ShieldCancellation:
     # Thread-synchronous codebases don't support cancellation semantics.
     # We have this class because we need to mirror the async and sync
     # cases within our package, but it's just a no-op.
-    def __enter__(self) -> ShieldCancellation:
+    def __enter__(self) -> "ShieldCancellation":
         return self
 
     def __exit__(
         self,
-        exc_type: type[BaseException] | None = None,
-        exc_value: BaseException | None = None,
-        traceback: types.TracebackType | None = None,
+        exc_type: Optional[Type[BaseException]] = None,
+        exc_value: Optional[BaseException] = None,
+        traceback: Optional[TracebackType] = None,
     ) -> None:
         pass

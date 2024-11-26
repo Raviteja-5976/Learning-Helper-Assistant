@@ -1,8 +1,9 @@
 import sqlite3
 from flask import render_template, url_for, session, request, redirect, Blueprint, flash
 from datetime import timedelta
-from models.authentication import user_db
+# from models.authentication import user_db
 # from models.authentication.user_db import get_db_connection
+# import hashlib
 
 auth = Blueprint('auth', __name__, template_folder='templates')
 
@@ -15,15 +16,17 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        # hashed_password = hashlib.sha256(password.encode()).hexdigest()
         
         try:
             conn = sqlite3.connect('learning_helper_assistant.db')
             cursor = conn.cursor()
-            cursor.execute('SELECT password FROM users WHERE username = ?', (username,))
+            cursor.execute("SELECT id FROM users WHERE username = ? AND password = ?", (username, password))
             user = cursor.fetchone()
             
-            if user and user[0] == password:
+            if user:
                 session['user'] = username
+                session['user_id'] = user[0]  # Store user_id in session
                 flash('Login successful!', 'success')
                 return redirect(url_for('home'))
             else:

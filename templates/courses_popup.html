@@ -16,6 +16,7 @@
         <input type="checkbox" id="index" name="index" class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-2 border-gray-300 rounded">
         <label for="index" class="text-sm font-medium text-gray-700">Index</label>
       </div>
+      <input type="hidden" name="index_checked" id="index_checked" value="false">
       <div id="index-fields" class="space-y-6" style="display: none;">
         <div>
           <label for="start_page" class="block text-sm font-medium text-gray-700 mb-2">Index Start Page:</label>
@@ -36,6 +37,7 @@
 <script>
   document.getElementById('index').addEventListener('change', function() {
     document.getElementById('index-fields').style.display = this.checked ? 'block' : 'none';
+    document.getElementById('index_checked').value = this.checked ? 'true' : 'false';
   });
 </script>
 {% endblock %}

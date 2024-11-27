@@ -9,18 +9,84 @@ c.execute('''CREATE TABLE user_topics (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,
     title TEXT NOT NULL,
-    topic TEXT NOT NULL
+    topic TEXT NOT NULL,
+    completed BOOLEAN DEFAULT 0
 )''')
 
-c.execute('''CREATE TABLE user_courses (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL,
-    title TEXT NOT NULL,
-    content BLOB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)''')
+# c.execute('''CREATE TABLE user_courses (
+#     id INTEGER PRIMARY KEY AUTOINCREMENT,
+#     username TEXT NOT NULL,
+#     title TEXT NOT NULL,
+#     content BLOB NOT NULL,
+#     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+# )''')
+
+# c.execute('DELETE FROM user_topics')
+# c.execute('DELETE FROM users')
+# c.execute('DELETE FROM sqlite_sequence')
 
 # c.execute("DROP TABLE IF EXISTS user_topics")
 # c.execute("DROP TABLE IF EXISTS user_courses")
 
 conn.commit()
+
+# from groq import Groq
+
+# client = Groq(api_key="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")
+# completion = client.chat.completions.create(
+#     model="mixtral-8x7b-32768",
+#     messages=[
+#         {
+#             "role": "user",
+#             "content": "Give me only one array of 10 elements"
+#         }
+#     ],
+#     temperature=1,
+#     max_tokens=1024,
+#     top_p=1,
+#     stream=False,
+#     stop=None,
+# )
+# response = completion.choices[0].message.content
+# print(response)
+
+
+# from groq import Groq
+
+# # Initialize the client
+# client = Groq(api_key="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") 
+
+# # Request completion
+# completion = client.chat.completions.create(
+#     model="mixtral-8x7b-32768",
+#     messages=[
+#         {
+#             "role": "user",
+#             "content": "Give me only one array of 10 elements which are words with no inverted commas in the array"
+#         }
+#     ],
+#     temperature=1,
+#     max_tokens=1024,
+#     top_p=1,
+#     stream=False,
+#     stop=None,
+# )
+
+# # Get the response content
+# response = completion.choices[0].message.content
+
+# # Extract the array from the response
+# import re
+
+# # Find the content inside the square brackets
+# match = re.search(r'\[(.*?)\]', response)
+# if match:
+#     array_string = match.group(1)  # Get the content inside brackets
+#     # Remove any inverted commas from the string
+#     array_string = array_string.replace("'", "").replace('"', '')
+#     array_list = [item.strip() for item in array_string.split(',')]
+#     print(array_list)
+#     for word in array_list:
+#         print(word)
+# else:
+#     print("No array found in the response.")

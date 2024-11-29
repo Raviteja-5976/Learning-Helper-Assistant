@@ -6,7 +6,9 @@ from models.my_courses.course_embed import process_file  # Import the process_fi
 import PyPDF2
 import re
 import time
-from models.my_courses.course_chat import get_chat_response, get_chat_history # Import the chat processing function
+from models.my_courses.course_chat import get_chat_response, get_chat_history, get_suggested_questions, imp_chat_response # Import the chat processing function
+from datetime import datetime
+from models.my_courses.course_podcast import generate_podcast as generate_podcast_audio, check_podcast_status
 
 
 client = Groq(api_key='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')
@@ -257,21 +259,86 @@ def chat(title, topic):
     
     user = session['user']
     session_key = f'messages_{user}_{title}_{topic}'
+    toggle_key = f'use_rag_{user}_{title}_{topic}'
 
     if request.method == 'POST':
-        user_message = request.form['message']
-        # Process the message using updated get_chat_response
-        assistant_response = get_chat_response(user, title, topic, user_message)
+        user_message = request.form.get('message', '')
+        if not user_message:
+            user_message = request.form.get('suggested_question', '')
         
-        # Update session with only the latest message exchange
-        messages = get_chat_history(user, title, topic)
-        session[session_key] = messages
+        if user_message:  # Only process if there's actually a message
+            use_rag = 'use_rag' in request.form
+            session[toggle_key] = use_rag
+            
+            response = get_chat_response(user, title, topic, user_message, use_rag)
+            messages = get_chat_history(user, title, topic)
+            session[session_key] = messages
         
         return redirect(url_for('courses.chat', title=title, topic=topic))
 
-    # Get chat history from database
     messages = get_chat_history(user, title, topic)
-    return render_template('course_chat.html', title=title, topic=topic, messages=messages)
+    use_rag = session.get(toggle_key, True)
+    
+    suggested_questions = []
+    for message in reversed(messages):
+        if message['role'] == 'assistant':
+            last_response = message['content']
+            suggested_questions = get_suggested_questions(title, topic, last_response)
+            break
+
+    # Fetch podcast URL from the database
+    conn = sqlite3.connect('learning_helper_assistant.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT podcast_url FROM podcasts
+        WHERE username = ? AND title = ? AND topic = ?
+        ORDER BY time_created DESC LIMIT 1
+    ''', (user, title, topic))
+    result = cursor.fetchone()
+    podcast_url = result[0] if result else None
+    conn.close()
+    
+    return render_template('course_chat.html', 
+                           title=title, 
+                           topic=topic, 
+                           messages=messages, 
+                           use_rag=use_rag,
+                           suggested_questions=suggested_questions,
+                           podcast_url=podcast_url)
+
+@courses.route('/<title>/<topic>/generate_podcast', methods=['POST'])
+def generate_podcast(title, topic):
+    user = session['user']
+    podcast_url = generate_podcast_audio(user, title, topic)
+    
+    if podcast_url:
+        # Store the podcast URL in the database
+        conn = sqlite3.connect('learning_helper_assistant.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO podcasts (username, title, topic, podcast_url, time_created)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (user, title, topic, podcast_url, datetime.now()))
+        conn.commit()
+        conn.close()
+    
+    return redirect(url_for('courses.chat', title=title, topic=topic))
+
+@courses.route('/<title>/<topic>/check_podcast_status/<job_id>', methods=['GET'])
+def check_podcast_status_route(title, topic, job_id):
+    podcast_url = check_podcast_status(job_id)
+    if podcast_url:
+        return redirect(podcast_url)
+    return redirect(url_for('courses.chat', title=title, topic=topic))
+    
+@courses.route('/<title>/<topic>/imp_chat_response')
+def get_imp_chat_response(title, topic):
+    if 'user' not in session:
+        return '', 403  # Forbidden if not logged in
+
+    user = session['user']
+    response = imp_chat_response(user, title, topic)
+    return response
 
 
 

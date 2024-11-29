@@ -70,7 +70,7 @@ def process_file(text, db_name):
             start_time = time.time()
 
         summary = summarize_chunk(chunk, max_tokens_per_request)
-        summarized_text = f"\n\nSummary: {summary}{chunk}"
+        summarized_text = f"\n\nSummary: {summary}\ndata : {chunk}"
         summarized_doc = Document(page_content=summarized_text)
         summarized_documents.append(summarized_doc)
 

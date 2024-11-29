@@ -7,10 +7,10 @@
   </div>
   <div class="topics-section p-5 overflow-y-auto" style="height: 70%;">
     <div class="grid grid-cols-3 gap-5">
-      {% for topic in topics %}
-        <a href="{{ url_for('courses.chat', title=title, topic=topic[0]) }}">
-          <div class="topic-tile bg-gray-300 p-5 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold">{{ topic[0] }}</h3>
+      {% for topic, completed in topics %}
+        <a href="{{ url_for('courses.chat', title=title, topic=topic) }}">
+          <div class="topic-tile {% if completed %}bg-green-300{% else %}bg-gray-300{% endif %} p-5 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold">{{ topic }}</h3>
           </div>
         </a>
       {% endfor %}

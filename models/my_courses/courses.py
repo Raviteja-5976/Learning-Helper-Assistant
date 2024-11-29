@@ -30,8 +30,22 @@ def my_courses():
     ''', (session['user'],))
     titles = cursor.fetchall()
     
+    courses_with_progress = []
+    for (title,) in titles:
+        cursor.execute('''
+            SELECT COUNT(*) FROM user_topics
+            WHERE username = ? AND title = ?
+        ''', (session['user'], title))
+        total_topics = cursor.fetchone()[0]
+        cursor.execute('''
+            SELECT COUNT(*) FROM user_topics
+            WHERE username = ? AND title = ? AND completed = 1
+        ''', (session['user'], title))
+        completed_topics = cursor.fetchone()[0]
+        courses_with_progress.append((title, completed_topics, total_topics))
+    
     conn.close()
-    return render_template('courses.html', courses=titles)
+    return render_template('courses.html', courses=courses_with_progress)
 
 
 
@@ -243,7 +257,7 @@ def course_description(title):
     conn = sqlite3.connect('learning_helper_assistant.db')
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT topic
+        SELECT topic, completed
         FROM user_topics
         WHERE username = ? AND title = ?
     ''', (session['user'], title))
@@ -339,6 +353,21 @@ def get_imp_chat_response(title, topic):
     user = session['user']
     response = imp_chat_response(user, title, topic)
     return response
+
+@courses.route('/<title>/<topic>/complete_topic', methods=['POST'])
+def complete_topic(title, topic):
+    user = session['user']
+    conn = sqlite3.connect('learning_helper_assistant.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE user_topics
+        SET completed = 1
+        WHERE username = ? AND title = ? AND topic = ?
+    ''', (user, title, topic))
+    conn.commit()
+    conn.close()
+    flash('You have completed this topic!', 'success')
+    return redirect(url_for('courses.course_description', title=title, topic=topic))
 
 
 

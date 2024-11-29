@@ -10,10 +10,11 @@
 
 <div class="courses-grid h-96 p-5 overflow-y-auto">
   <div class="grid grid-cols-4 gap-5">
-    {% for course in courses %}
-      <a href="{{ url_for('courses.course_description', title=course[0]) }}">
+    {% for title, completed_topics, total_topics in courses %}
+      <a href="{{ url_for('courses.course_description', title=title) }}">
         <div class="course-tile bg-gray-300 p-5 rounded-lg shadow-md">
-          <h3 class="text-xl font-semibold">{{ course[0] }}</h3>
+          <h3 class="text-xl font-semibold">{{ title }}</h3>
+          <p class="mt-2 text-sm">{{ completed_topics }} / {{ total_topics }} topics completed</p>
         </div>
       </a>
     {% endfor %}

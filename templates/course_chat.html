@@ -30,6 +30,12 @@
             {% endif %}
             <!-- New button for important points -->
             <button id="imp-points-btn" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Important Points</button>
+            <!-- Completed my course button -->
+            <form method="POST" action="{{ url_for('courses.complete_topic', title=title, topic=topic) }}">
+                <button type="submit" class="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                    Completed my course
+                </button>
+            </form>
         </div>
     </div>
 

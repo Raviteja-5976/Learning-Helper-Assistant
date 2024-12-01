@@ -69,10 +69,32 @@
                     </div>
                 {% endif %}
             {% endfor %}
+            <!-- Suggested Questions -->
+            {% if suggested_questions %}
+            <div class="p-4">
+                <div class="bg-blue-100 border border-blue-300 rounded-md">
+                    <h3 class="text-md font-semibold text-blue-800 px-4 py-2">Suggested Questions</h3>
+                    <div class="border-t border-blue-200">
+                        {% for question in suggested_questions %}
+                        <form method="POST">
+                            <input type="hidden" name="suggested_question" value="{{ question }}">
+                            <button type="submit" class="w-full text-left px-4 py-2 hover:bg-blue-200">
+                                {{ question }}
+                            </button>
+                        </form>
+                        {% if not loop.last %}
+                        <hr class="border-blue-200">
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
         <div class="p-4 border-t">
             <form method="POST" class="flex gap-4">
                 <input type="text" name="message" class="flex-1 rounded-md border-gray-300 shadow-sm p-2" placeholder="Type your message..." required>
+                <input type="hidden" name="suggested_question" id="suggested-question-input">
                 <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Send</button>
             </form>
         </div>
@@ -118,6 +140,14 @@
             element.innerHTML = processedContent;
         });
     }
+
+    // Function to handle suggested question click
+    document.querySelectorAll('form button[type="submit"]').forEach(button => {
+        button.addEventListener('click', function(event) {
+            const suggestedQuestion = this.previousElementSibling.value;
+            document.getElementById('suggested-question-input').value = suggestedQuestion;
+        });
+    });
 
     // Render markdown on page load
     document.addEventListener('DOMContentLoaded', function() {

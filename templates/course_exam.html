@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - {{ topic }} Test{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-4">Test on {{ topic }}</h2>
+    {% if questions %}
+    <form method="POST">
+        {% for question in questions %}
+        <div class="mb-6">
+            <p class="mb-2 font-semibold">{{ question }}</p>
+            <textarea name="answers" rows="4" class="w-full p-2 border border-gray-300 rounded-md" required></textarea>
+            <input type="hidden" name="questions" value="{{ question }}">
+        </div>
+        {% endfor %}
+        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Submit Answers</button>
+    </form>
+    {% elif evaluations %}
+    {% for item in evaluations %}
+    <div class="mb-6">
+        <p class="mb-2 font-semibold">{{ item.question }}</p>
+        <p class="mb-2"><strong>Your answer:</strong> {{ item.answer }}</p>
+        <div class="bg-gray-100 p-4 rounded-md">
+            <p><strong>Evaluation:</strong></p>
+            <p>{{ item.evaluation }}</p>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No questions available.</p>
+    {% endif %}
+</div>
+{% endblock %}

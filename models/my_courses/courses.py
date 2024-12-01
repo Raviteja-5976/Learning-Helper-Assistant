@@ -9,6 +9,7 @@ import time
 from models.my_courses.course_chat import get_chat_response, get_chat_history, get_suggested_questions, imp_chat_response # Import the chat processing function
 from datetime import datetime
 from models.my_courses.course_podcast import generate_podcast as generate_podcast_audio, check_podcast_status
+from models.my_courses.course_exam import generate_exam, evaluate_exam  # Import exam functions
 
 
 client = Groq(api_key='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')
@@ -368,6 +369,25 @@ def complete_topic(title, topic):
     conn.close()
     flash('You have completed this topic!', 'success')
     return redirect(url_for('courses.course_description', title=title, topic=topic))
+
+@courses.route('/<title>/<topic>/test', methods=['GET', 'POST'])
+def take_test(title, topic):
+    user = session['user']
+    difficulty = request.args.get('difficulty')
+    if request.method == 'GET':
+        if not difficulty:
+            return redirect(url_for('courses.chat', title=title, topic=topic))
+        else:
+            questions = generate_exam(user, title, topic, difficulty)
+            return render_template('course_exam.html', title=title, topic=topic, questions=questions)
+    else:
+        user_answers = request.form.getlist('answers')
+        questions = request.form.getlist('questions')
+        evaluations = []
+        for question, answer in zip(questions, user_answers):
+            evaluation = evaluate_exam(question, answer)
+            evaluations.append({'question': question, 'answer': answer, 'evaluation': evaluation})
+        return render_template('course_exam.html', title=title, topic=topic, evaluations=evaluations)
 
 
 

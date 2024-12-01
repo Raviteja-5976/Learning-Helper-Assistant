@@ -12,13 +12,13 @@
 {% block content %}
 <div class="h-[90vh] flex">
     <!-- Fixed left sidebar -->
-    <div class="w-[20%] bg-gray-100 border-r shadow-lg flex flex-col fixed left-0 h-[90vh]">
+    <div class="w-[25%] bg-gray-100 border-r shadow-lg flex flex-col fixed left-0 h-[90vh]">
         <div class="p-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+            <h2 class="text-lg font-bold text-gray-800 mb-2">
                 <a href="{{ url_for('courses.course_description', title=title) }}" class="hover:underline">{{ title }}</a>
             </h2>
             <div class="h-px bg-gray-300 my-4"></div>
-            <h3 class="text-xl text-gray-700 mb-8">{{ topic }}</h3>
+            <h3 class="text-base text-gray-700 mb-8">{{ topic }}</h3>
             <!-- Podcast section -->
             {% if podcast_url %}
                 <a href="{{ url_for('courses.check_podcast_status_route', title=title, topic=topic, job_id=podcast_url.split('/')[-1]) }}" target="_blank" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Listen Podcast</a>
@@ -36,23 +36,24 @@
                     Completed my course
                 </button>
             </form>
+            <button id="take-test-btn" class="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">Take a test</button>
         </div>
     </div>
 
     <!-- Chat container with offset for sidebar -->
-    <div class="w-[80%] ml-[20%] flex flex-col relative">
+    <div class="w-[75%] ml-[25%] flex flex-col relative">
         <!-- Scrollable chat area -->
         <div class="flex-1 overflow-y-auto p-6" id="chat-messages">
             {% for message in messages %}
                 {% if message.role == 'user' %}
                     <div class="flex justify-end mb-4">
-                        <div class="bg-indigo-600 text-white rounded-lg px-4 py-2 max-w-[70%]">
+                        <div class="bg-indigo-600 text-white rounded-lg px-4 py-2 max-w-[60%]">
                             {{ message.content }}
                         </div>
                     </div>
                 {% elif message.role == 'assistant' %}
                     <div class="flex justify-start mb-4">
-                        <div class="bg-gray-200 rounded-lg px-4 py-2 max-w-[70%]">
+                        <div class="bg-gray-200 rounded-lg px-4 py-2 max-w-[60%]">
                             <div class="prose prose-sm max-w-none" data-markdown-content="{{ message.content|escape }}">
                                 <!-- Markdown content will be rendered here -->
                             </div>
@@ -112,6 +113,18 @@
         </div>
         <div id="imp-points-content" class="prose prose-sm max-w-none overflow-y-auto flex-1">
             <!-- Markdown content will be rendered here -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal for difficulty selection -->
+<div id="difficulty-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-bold mb-4">Select Difficulty</h2>
+        <div class="flex space-x-4">
+            <button class="difficulty-btn px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" data-difficulty="Easy">Easy</button>
+            <button class="difficulty-btn px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700" data-difficulty="Medium">Medium</button>
+            <button class="difficulty-btn px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700" data-difficulty="Hard">Hard</button>
         </div>
     </div>
 </div>
@@ -209,6 +222,19 @@
     document.getElementById('close-modal-btn').addEventListener('click', () => {
         document.getElementById('imp-points-modal').classList.add('hidden');
     });
+
+    // Show difficulty modal when 'Take a test' button is clicked
+    document.getElementById('take-test-btn').addEventListener('click', () => {
+        document.getElementById('difficulty-modal').classList.remove('hidden');
+    });
+
+    // Handle difficulty selection
+    document.querySelectorAll('.difficulty-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const difficulty = button.getAttribute('data-difficulty');
+            window.location.href = "{{ url_for('courses.take_test', title=title, topic=topic) }}?difficulty=" + difficulty;
+        });
+    });
 </script>
 
-{% endblock %}
+{% endblock %} 

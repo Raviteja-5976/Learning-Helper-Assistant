@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint, request, session, redirect, url_for, flash
 from groq import Groq
 import json
+from models.my_courses.course_chat import get_suggested_questions  # Import the function
 
 rapid_chat = Blueprint('rapid_chat', __name__, template_folder='templates')
 client = Groq(api_key='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')
@@ -70,8 +71,10 @@ def chat():
         session['messages'] = [system_message]
         session.modified = True
     
+    suggested_questions = []  # Initialize suggested_questions to an empty list
+    
     if request.method == 'POST':
-        user_message = request.form.get('message')
+        user_message = request.form.get('message') or request.form.get('suggested_question')
         if user_message:
             messages_to_send = session['messages'].copy()
             messages_to_send.append({"role": "user", "content": user_message})
@@ -87,14 +90,18 @@ def chat():
                 )
                 
                 session['messages'].append({"role": "user", "content": user_message})
+                assistant_message = completion.choices[0].message.content
                 session['messages'].append({
                     "role": "assistant",
-                    "content": completion.choices[0].message.content
+                    "content": assistant_message
                 })
                 session.modified = True
+                
+                # Generate suggested questions
+                suggested_questions = get_suggested_questions(session['topic'], session['topic'], assistant_message)
                 
             except Exception as e:
                 flash(f"Error: {str(e)}")
                 
-    return render_template('rapid_chat.html', messages=session.get('messages', [])[1:])
+    return render_template('rapid_chat.html', messages=session.get('messages', [])[1:], suggested_questions=suggested_questions)
 

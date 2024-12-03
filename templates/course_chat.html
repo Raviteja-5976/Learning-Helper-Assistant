@@ -12,13 +12,13 @@
 {% block content %}
 <div class="h-[90vh] flex">
     <!-- Fixed left sidebar -->
-    <div class="w-[25%] bg-gray-100 border-r shadow-lg flex flex-col fixed left-0 h-[90vh]">
+    <div class="w-[22%] bg-gray-100 border-r shadow-lg flex flex-col fixed left-0 h-[90vh]">
         <div class="p-6">
-            <h2 class="text-lg font-bold text-gray-800 mb-2">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">
                 <a href="{{ url_for('courses.course_description', title=title) }}" class="hover:underline">{{ title }}</a>
             </h2>
             <div class="h-px bg-gray-300 my-4"></div>
-            <h3 class="text-base text-gray-700 mb-8">{{ topic }}</h3>
+            <h3 class="text-xl text-gray-700 mb-8">{{ topic }}</h3>
             <!-- Podcast section -->
             {% if podcast_url %}
                 <a href="{{ url_for('courses.check_podcast_status_route', title=title, topic=topic, job_id=podcast_url.split('/')[-1]) }}" target="_blank" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Listen Podcast</a>
@@ -41,7 +41,7 @@
     </div>
 
     <!-- Chat container with offset for sidebar -->
-    <div class="w-[75%] ml-[25%] flex flex-col relative">
+    <div class="w-[78%] ml-[22%] flex flex-col relative">
         <!-- Scrollable chat area -->
         <div class="flex-1 overflow-y-auto p-6" id="chat-messages">
             {% for message in messages %}

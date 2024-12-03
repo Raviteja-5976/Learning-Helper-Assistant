@@ -50,19 +50,19 @@ cursor = conn.cursor()
 #     DELETE FROM sqlite_sequence
 # ''')
 
-# From user_courses delete vRetrieval_Agumented_Generation 
-cursor.execute('''
-    DELETE FROM user_courses WHERE title = 'Retrieval_Agumented_Generation'
-''')
+# # From user_courses delete vRetrieval_Agumented_Generation 
+# cursor.execute('''
+#     DELETE FROM user_courses WHERE title = 'Retrieval_Agumented_Generation'
+# ''')
 
-# From user_topics delete course = Retrieval_Agumented_Generation
-cursor.execute('''
-    DELETE FROM user_topics WHERE title = 'Retrieval_Agumented_Generation'
-''')
+# # From user_topics delete course = Retrieval_Agumented_Generation
+# cursor.execute('''
+#     DELETE FROM user_topics WHERE title = 'Retrieval_Agumented_Generation'
+# ''')
 
 # from chat_history delete title = Retrieval_Agumented_Generation
 cursor.execute('''
-    DELETE FROM chat_history WHERE title = 'Retrieval_Agumented_Generation'
+    DELETE FROM user_courses WHERE id = 4
 ''')
 
 conn.commit()

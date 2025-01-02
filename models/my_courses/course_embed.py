@@ -85,21 +85,4 @@ def process_file(text, db_name):
         persist_directory=CHROMA_PATH
     )
 
-# Remove or comment out the main function
-# def main():
-#     data = load_doc()
-#     documents = text_splitter.split_documents(data)
-#     summarized_documents = []
-    
-#     for doc in documents:
-#         summary = summarize_chunk(doc)
-#         summarized_documents.append(f"{doc}\n\nSummary: {summary}")
-    
-#     Chroma.from_documents(
-#         summarized_documents,
-#         OllamaEmbeddings(model='nomic-embed-text'),
-#         persist_directory=CHROMA_PATH
-#     )
 
-# if __name__ == '__main__':
-#     main()

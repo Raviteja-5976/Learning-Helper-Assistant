@@ -6,7 +6,7 @@ from langchain_community.embeddings.ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
 from langchain.prompts import ChatPromptTemplate
 
-client = Groq(api_key='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')
+client = Groq(api_key='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')
 
 PROMPT_TEMPLATE = """
 Answer the question based only on the following context and format your response using markdown:

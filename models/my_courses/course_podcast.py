@@ -5,7 +5,7 @@ import time
 
 def generate_podcast(username, title, topic):
     # ...existing imports...
-    client = Groq(api_key='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')
+    client = Groq(api_key='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')
     
     # Fetch the assistant's first response from the chat history
     query = '''

@@ -21,7 +21,7 @@ text_splitter = RecursiveCharacterTextSplitter(
 )
 
 def summarize_chunk(chunk, max_tokens):
-    client = Groq(api_key="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")  # Make sure to provide your API key here
+    client = Groq(api_key="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")  # Make sure to provide your API key here
     completion = client.chat.completions.create(
         model="llama3-8b-8192",
         messages=[{"role": "user", "content": f"Summarize the content in less than 100 words: {chunk}"}],

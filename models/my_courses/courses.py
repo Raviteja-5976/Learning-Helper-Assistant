@@ -12,7 +12,7 @@ from models.my_courses.course_podcast import generate_podcast as generate_podcas
 from models.my_courses.course_exam import generate_exam, evaluate_exam  # Import exam functions
 
 
-client = Groq(api_key='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')
+client = Groq(api_key='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')
 
 courses = Blueprint('courses', __name__, template_folder='templates')
 

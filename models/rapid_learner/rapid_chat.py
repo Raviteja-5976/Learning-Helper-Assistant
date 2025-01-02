@@ -1,10 +1,10 @@
 from flask import render_template, Blueprint, request, session, redirect, url_for, flash
 from groq import Groq
-import json
 from models.my_courses.course_chat import get_suggested_questions  # Import the function
+from models.config import GROQ_API_KEY_RAPID_CHAT
 
 rapid_chat = Blueprint('rapid_chat', __name__, template_folder='templates')
-client = Groq(api_key='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')
+client = Groq(api_key=GROQ_API_KEY_RAPID_CHAT)
 
 @rapid_chat.route('/popup', methods=['GET', 'POST'])
 def rapid_chat_popup():

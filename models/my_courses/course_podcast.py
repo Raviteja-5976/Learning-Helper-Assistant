@@ -2,10 +2,11 @@ import sqlite3
 from groq import Groq
 import requests
 import time
+from models.config import GROQ_API_KEY_COURSE_PODCAST, USER_ID, SECRET_KEY
 
 def generate_podcast(username, title, topic):
     # ...existing imports...
-    client = Groq(api_key='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')
+    client = Groq(api_key=GROQ_API_KEY_COURSE_PODCAST)
     
     # Fetch the assistant's first response from the chat history
     query = '''
@@ -48,11 +49,9 @@ def generate_podcast(username, title, topic):
     print(generated_transcript)
     
     # Set up headers for API requests
-    user_id = 'WayNXGmUolfPoRXFuwa5XuIFFmj1'
-    secret_key = 'ak-1434c93eae2d40c4bd9846e8d5e88bb7'
     headers = {
-        'X-USER-ID': user_id,
-        'Authorization': secret_key,
+        'X-USER-ID': USER_ID,
+        'Authorization': SECRET_KEY,
         'Content-Type': 'application/json',
     }
     
@@ -85,11 +84,9 @@ def generate_podcast(username, title, topic):
     return url
 
 def check_podcast_status(job_id):
-    user_id = 'WayNXGmUolfPoRXFuwa5XuIFFmj1'
-    secret_key = 'ak-1434c93eae2d40c4bd9846e8d5e88bb7'
     headers = {
-        'X-USER-ID': user_id,
-        'Authorization': secret_key,
+        'X-USER-ID': USER_ID,
+        'Authorization': SECRET_KEY,
         'Content-Type': 'application/json',
     }
     

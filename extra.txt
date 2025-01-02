@@ -39,7 +39,7 @@ conn.commit()
 
 # from groq import Groq
 
-# client = Groq(api_key="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")
+# client = Groq(api_key="")
 # completion = client.chat.completions.create(
 #     model="mixtral-8x7b-32768",
 #     messages=[
@@ -61,7 +61,7 @@ conn.commit()
 # from groq import Groq
 
 # # Initialize the client
-# client = Groq(api_key="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") 
+# client = Groq(api_key="") 
 
 # # Request completion
 # completion = client.chat.completions.create(

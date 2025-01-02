@@ -10,9 +10,9 @@ from models.my_courses.course_chat import get_chat_response, get_chat_history, g
 from datetime import datetime
 from models.my_courses.course_podcast import generate_podcast as generate_podcast_audio, check_podcast_status
 from models.my_courses.course_exam import generate_exam, evaluate_exam  # Import exam functions
+from models.config import GROQ_API_KEY_COURSES
 
-
-client = Groq(api_key='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')
+client = Groq(api_key=GROQ_API_KEY_COURSES)
 
 courses = Blueprint('courses', __name__, template_folder='templates')
 

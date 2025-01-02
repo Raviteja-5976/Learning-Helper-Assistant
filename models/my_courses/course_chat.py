@@ -5,8 +5,9 @@ from datetime import datetime
 from langchain_community.embeddings.ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
 from langchain.prompts import ChatPromptTemplate
+from models.config import GROQ_API_KEY_COURSE_CHAT
 
-client = Groq(api_key='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')
+client = Groq(api_key=GROQ_API_KEY_COURSE_CHAT)
 
 PROMPT_TEMPLATE = """
 Answer the question based only on the following context and format your response using markdown:
@@ -193,9 +194,6 @@ def get_chat_response(username, title, topic, user_message, use_rag=True):
 
     # Store AI response
     store_chat_message(username, title, topic, 'assistant', response)
-
-    # Remove suggested questions generation here
-    # suggested_questions = get_suggested_questions(title, topic, response)
 
     return response
 

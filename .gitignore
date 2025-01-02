@@ -1,1 +1,5 @@
-learning_helper_assistant/
+/learning_helper_assistant/
+/models/config.py
+/learning_helper_assistant.db/apikeys.txt
+/apikeys.txt
+/learning_helper_assistant.db

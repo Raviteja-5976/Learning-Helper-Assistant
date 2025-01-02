@@ -1,8 +1,9 @@
 import sqlite3
 from groq import Groq
 import re
+from models.config import GROQ_API_KEY_COURSE_EXAM
 
-client = Groq(api_key='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')
+client = Groq(api_key=GROQ_API_KEY_COURSE_EXAM)
 
 def generate_exam(username, title, topic, difficulty):
     # Fetch the assistant's first response from the chat history

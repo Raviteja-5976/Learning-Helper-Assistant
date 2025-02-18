@@ -1,4 +1,6 @@
-/learning_helper_assistant/
-/models/confi01.py
+/models/config.py
 /apikeys.txt
 /learning_helper_assistant.db
+/lha/
+/chroma/
+/models/db/a.py

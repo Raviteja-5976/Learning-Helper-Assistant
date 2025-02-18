@@ -1,50 +1,62 @@
 import sqlite3
 
 def create_tables():
-    conn = sqlite3.connect('learning_helper.db')
+    conn = sqlite3.connect('learning_helper_assistant.db')
     cursor = conn.cursor()
 
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS users (
-        username TEXT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
-        name TEXT NOT NULL,
-        age INTEGER,
+        Name TEXT NOT NULL,
+        Age INTEGER,
         gender TEXT,
         email TEXT,
-        profession TEXT
+        Profession TEXT
     )
     ''')
 
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS user_courses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT,
         title TEXT,
         content BLOB,
-        created_at TIMESTAMP,
-        FOREIGN KEY (username) REFERENCES users(username)
+        created_at TIMESTAMP
     )
     ''')
 
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS user_topics (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT,
         title TEXT,
         topic TEXT,
-        completed BOOLEAN,
-        FOREIGN KEY (username) REFERENCES users(username)
+        completed BOOLEAN
     )
     ''')
 
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS chat_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT,
         title TEXT,
         topic TEXT,
         role TEXT,
         content TEXT,
-        timestamp TIMESTAMP,
-        FOREIGN KEY (username) REFERENCES users(username)
+        timestamp TIMESTAMP
+    )
+    ''')
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS podcasts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        title TEXT,  
+        topic TEXT,
+        podcast_url TEXT,
+        time_created TIMESTAMP      
     )
     ''')
 
